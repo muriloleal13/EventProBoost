@@ -1,0 +1,112 @@
+services:
+  redis:
+    container_name: redis-projetinho_app
+    image: redis
+    volumes:
+      - redis:/projetinho_app
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
+    restart: always
+
+  postgres:
+    container_name: postgres-projetinho_app
+    image: postgres
+    environment:
+      POSTGRES_DB: projetinho_app
+      POSTGRES_USER: avmb
+      POSTGRES_PASSWORD: 8o46UnIR2xpT6QjEQuFD3g9NbDkFGqGV
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/projetinho_app
+    expose:
+      - 5437
+    ports:
+      - 5437:5437
+    command: -p 5437
+    healthcheck:
+      test: pg_isready -U avmb -d projetinho_app -p 5437
+      interval: 15s
+      timeout: 5s
+      retries: 20
+    restart: always
+
+  web:
+    container_name: web
+    image: web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 9000:9000
+
+  # rabbitmq:
+  #   container_name: rabbitmq-projetinho_app
+  #   image: rabbitmq-projetinho_app
+  #   build:
+  #     context: ./rabbitmq
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 5672:5672
+  #     - 15672:15672
+  #     - 1883:1883
+  #   command: '/bin/bash -c "rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_amqp1_0; rabbitmq-server"'
+  #   expose:
+  #     - 5672
+  #     - 15672
+  #     - 1883
+  #   volumes:
+  #     - rabbitmq:/projetinho_app
+  #   depends_on:
+  #     redis:
+  #       condition: service_started
+  #   healthcheck:
+  #     test: rabbitmq-diagnostics -q ping
+  #     interval: 30s
+  #     timeout: 30s
+  #     retries: 3
+  #   restart: always
+
+  # api:
+  #   container_name: api-projetinho_app
+  #   image: api-projetinho_app
+  #   build:
+  #     context: ./coleira-api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8090:8090
+  #   depends_on:
+  #     redis:
+  #       condition: service_started
+  #     postgres:
+  #       condition: service_healthy
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: curl --fail http://localhost:8090/projetinhoapp-api.html || exit 1
+  #     interval: 30s
+  #     timeout: 5s
+  #     retries: 20
+  #   restart: always
+
+  # # apenas para teste
+  # mqtt:
+  #   container_name: mqtt-projetinho_app
+  #   image: mqtt-projetinho_app
+  #   build:
+  #     context: ./coleira-mqtt
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     redis:
+  #       condition: service_started
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   restart: always
+
+volumes:
+  redis:
+  postgres:

@@ -1,0 +1,76 @@
+// app global css in SCSS form
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  --v-onboarding-overlay-z: 140;
+  --v-onboarding-step-z: 150;
+}
+
+.h-fit-content {
+  min-height: fit-content !important;
+}
+.w-fit-content {
+  min-width: fit-content !important;
+}
+
+#q-app {
+  min-height: 100vh;
+}
+
+.container {
+  padding: 0px 20px;
+}
+
+@font-face {
+  font-family: 'Archivo';
+  src: local('Archivo'),
+    url(../assets/fonts/Archivo/Archivo-Regular.ttf) format('truetype'),
+    url(../assets/fonts/Archivo/Archivo-Bold.ttf) format('truetype'),
+    url(../assets/fonts/Archivo/Archivo-Light.ttf) format('truetype');
+}
+
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span {
+  font-family: 'Archivo' !important;
+}
+
+input,
+select {
+  // color: $input-text-color !important;
+  -webkit-text-fill-color: $input-text-color !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+.animation-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 $primary;
+  }
+
+  70% {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 10px rgba(229, 62, 62, 0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bg-blur {
+  backdrop-filter: blur(3px);
+}
